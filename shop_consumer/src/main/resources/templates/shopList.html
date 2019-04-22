@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<!-- saved from url=(0063)http://test.happymmall.com/list.html?keyword=%E6%89%8B%E6%9C%BA -->
+<html>
+ <head>
+     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+     <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="keywords" content="MMall,电商系统,网购平台,慕课三剑客,教学视频,前端开发,后端开发,React,SSM,Java,权限系统,分布式,高并发,毕业设计,毕设,代码">
+     <meta name="description" content="MMall电商平台教学，最火的电商系统开发教学视频，囊括前后端多个课程，一线企业讲师亲自授课，慕课三剑客带你成为IT行业大牛。">
+     <script src="/js/jquery-2.1.1.min.js"></script>
+     <link rel="dns-prefetch" href="http://s.happymmall.com/">
+     <link rel="dns-prefetch" href="http://cdn.bootcss.com/">
+     <script src="/page/hm.js"></script>
+     <title>MMall电商平台</title>
+    <link rel="shortcut icon" href="http://s.happymmall.com/mmall_fe/dist/favicon.ico">
+    <link href="/page/common.css" rel="stylesheet">
+ </head>
+    <body>
+        <!--顶部条目-->
+        <div class="notice-con">
+             <div class="w">
+             </div>
+        </div>
+        <div class="site-nav">
+            <div class="w">
+                <div class="user-info">
+                    <span class="site-user not-login" style="display: inline;">
+                        <span class="link link-login">登录</span>
+                        <span class="link link-register" href="./register.html">注册</span>
+                    </span>
+                    <span class="site-user login">
+                        <span class="link-text">欢迎，<span class="username"></span>
+                        </span> <span class="link link-logout">退出</span>
+                    </span>
+                </div>
+                <ul class="nav-list">
+                    <li class="nav-item">
+                        <a class="link" href="/to/toshopcar">
+                            <i class="fa fa-shopping-cart"></i>
+                            购物车(<span class="cart-count">0</span>)</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="link" href="http://test.happymmall.com/order-list.html">我的订单</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="link" href="http://test.happymmall.com/user-center.html">我的MMall</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="link" href="http://test.happymmall.com/about.html">关于MMall</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!--顶部条目结束-->
+        <!--搜索开始-->
+        <div class="header">
+            <div class="w">
+                <a class="logo" href="http://test.happymmall.com/index.html">MMall</a>
+                <div class="search-form">
+                    <input class="search-input" id="search-input" placeholder="请输入商品名称">
+                    <button onclick="sou()" style="height:32px;background-color: #d84f4b">搜索</button>
+                </div>
+            </div>
+        </div>
+        <!--搜索结束-->
+        <!--商品展示条目-->
+        <div class="crumb">
+            <div class="w">
+                <div class="crumb-list">
+                    <a href="http://test.happymmall.com/index.html" class="crumb-item">MMall</a>
+                    <span>&gt;</span>
+                    <span class="crumb-item">商品列表</span>
+                </div>
+            </div>
+        </div>
+        <!--商品展示条目结束-->
+        <div class="list-wrap w">
+            <ul class="sorter-con">
+                <li class="sorter-item active" data-type="default">
+                    <span>推荐排序</span>
+                </li>
+                <li class="sorter-item" data-type="price">
+                    <span>价格</span>
+                    <i class="fa fa-sort-asc"></i>
+                    <i class="fa fa-sort-desc"></i>
+                </li>
+            </ul>
+            <!-- list容器 -->
+            <ul class="p-list-con" id="ulList">
+
+            </ul>
+            <!-- 分页容器 -->
+
+        </div>
+        <div class="footer"> <div class="w"> <div class="links"> <a target="_blank" class="link" href="https://coding.imooc.com/">慕课网实战</a> | <a target="_blank" class="link" href="https://www.imooc.com/u/198337">Rosen主页</a> | <a target="_blank" class="link" href="https://www.imooc.com/t/2705746">Geely主页</a> | <a target="_blank" class="link" href="https://www.imooc.com/u/5980627">Jimin主页</a> </div> <p class="copyright"> Copyright © 2018 happymmall.com All Rights Reserved </p> </div> </div> <script src="/page/jquery.js"></script>
+    <script type="text/javascript" src="/page/base.js"></script><script type="text/javascript" src="/page/common.js"></script><script type="text/javascript" src="/page/list.js"></script>
+</body>
+<script>
+    $(function(){
+        getGood();
+    })
+    function getGood(){
+        $.ajax({
+            url:"/to/getGood",
+            type:"post",
+            success:function(data){
+                var tt = ""
+                $.each(data,function(index,obj){
+                    tt += "<li style='float: left'>";
+                    tt += "<div class='p-img-con'><a>" +
+                        "<img style='width: 250px;height: 250px' src='/page"+obj.goodImg+"'/>" +
+                        "</a></div>";
+                    tt +="<div class='p-name-con'>商品名称:"+obj.goodName+"</div>";
+                    tt += "<div class='p-price-con'>商品价格:"+obj.goodPrice+"</div>";
+                    tt +="<div class='p-name-con'>商品数量:"+obj.goodCount+"</div>";
+                    tt +="<div class='p-norms-con'>商品规格:"+obj.goodNorms+"</div>";
+                    tt +="<div class='p-vender-con'>商品厂家:"+obj.goodVender+"</div>"
+                    tt +="<button onclick='updateStart("+obj.id+",5)'>加入购物车</button>"
+                    tt += "</li>";
+                });
+                $("#ulList").html(tt);
+            },
+            error:function(){
+                alert("失败了")
+            }
+        })
+    }
+    function updateStart(id,count) {
+        //var cookie_name='userName';
+        var cookID='userID';
+        var userid=$.cookie(cookID);
+        $.ajax({
+            url:"/to/updateStart",
+            type:"POST",
+            data:{
+                userId:(userid==null? 0 :userid),
+                id:id,
+                goodCount:count
+            },
+            success:function(pageUtil){
+                alert("加入购物车成功")
+            }
+        })
+    }
+    function sou(){
+        var queryInfo = $("#search-input").val();
+        if(queryInfo!=null){
+            $.ajax({
+                url: "/elastic/queryGood?queryInfo="+queryInfo,
+                type: "post",
+                success: function (data) {
+                    var tt = ""
+                    $.each(data, function (index, obj) {
+                        tt += "<li style='float: left'>";
+                        tt += "<div class='p-img-con'><a>" +
+                            "<img style='width: 200px;height: 200px' src='/page" + obj.goodImg + "'/>" +
+                            "</a></div>";
+                        tt +="<div class='p-name-con'>商品名称:"+obj.goodName+"</div>";
+                        tt += "<div class='p-price-con'>商品价格:" + obj.goodPrice + "</div>";
+                        tt += "<div class='p-name-con'>商品数量:" + obj.goodCount + "</div>";
+                        tt += "<div class='p-norms-con'>商品规格:" + obj.goodNorms + "</div>";
+                        tt += "<div class='p-vender-con'>商品厂家:" + obj.goodVender + "</div>"
+                        tt += "<button onclick='updateStart(" + obj.id + ",5)'>加入购物车</button>"
+                        tt += "</li>";
+                    });
+                    $("#ulList").html(tt);
+                },
+                error: function () {
+                    alert("失败了")
+                }
+            })
+        }else {
+            alert("请输入搜索内容")
+        }
+    }
+
+</script>
+</html>

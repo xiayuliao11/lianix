@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<!-- saved from url=(0062)http://www.xb1y.com/index.php/Home/Member/Member_register.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>账号注册</title>
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+<link rel="stylesheet" href="/账号注册_files/common.css">
+<link rel="stylesheet" href="/账号注册_files/css.css">
+<script src="/账号注册_files/jQuery-2.2.0.min.js.下载"></script>
+<!--<script src="账号注册_files/layer.js.下载"></script><link rel="stylesheet" href="账号注册_files/layer.css" id="layui_layer_skinlayercss" style="">-->
+<!--[if lt IE 9]>
+<script src="/Public/houtai/bootstrap/js/html5shiv.min.js"></script>
+<script src="/Public/houtai/bootstrap/js/respond.min.js"></script>
+<![endif]-->
+<link rel="shortcut  icon" type="image/x-icon" href="#" media="screen">
+
+    
+     <link rel="stylesheet" href="/账号注册_files/common.css">
+    <link rel="stylesheet" href="/账号注册_files/navregister.css">
+    
+    
+    <!--注册用js--css begin  -->
+    <script  type="text/javascript" src="/js/jquery-2.1.1.min.js"></script>
+    
+    <!-- lhgdialog -->
+   <!-- <link href="账号注册_files/iblack.css" rel="stylesheet" id="lhgdialoglink">
+    <script src="账号注册_files/lhgdialog.js.下载" type="text/javascript"></script>--!>
+    
+    <!-- validate -->
+    <!--<script type="text/javascript" src="账号注册_files/jquery.validate.js.下载"></script>-->
+	<!--<script src="账号注册_files/messages_cn.js.下载" type="text/javascript"></script> -->
+   
+     <!-- layer -->
+    <!-- <link rel="stylesheet" href="账号注册_files/layer.css">-->
+     <!--<script src="账号注册_files/layer.js.下载"></script>-->
+	 <script  type="text/javascript" src="/js/layer/layer.js"></script>
+	 <link rel="stylesheet" href="/js/layer/theme/default/layer.css"/>
+    
+     <!-- ajax提交 -->
+    <!-- <script src="账号注册_files/myFormValidate.js.下载"></script>
+ 
+    <link rel="shortcut  icon" type="image/x-icon" href="#" media="screen">-->
+</head>
+<body class="hold-transition skin-blue sidebar-mini" id="app"><div style="position: absolute; left: -9999em; top: 229px; visibility: visible; width: auto; z-index: 1976;"><table class="ui_border ui_state_visible ui_state_focus"><tbody><tr><td class="ui_lt"></td><td class="ui_t"></td><td class="ui_rt"></td></tr><tr><td class="ui_l"></td><td class="ui_c"><div class="ui_inner"><table class="ui_dialog"><tbody><tr><td colspan="2"><div class="ui_title_bar"><div class="ui_title" unselectable="on" style="cursor: move;">视窗 </div><div class="ui_title_buttons"><a class="ui_min" href="javascript:void(0);" title="最小化" style="display: inline-block;"><b class="ui_min_b"></b></a><a class="ui_max" href="javascript:void(0);" title="最大化" style="display: inline-block;"><b class="ui_max_b"></b></a><a class="ui_res" href="javascript:void(0);" title="还原"><b class="ui_res_b"></b><b class="ui_res_t"></b></a><a class="ui_close" href="javascript:void(0);" title="关闭(esc键)" style="display: inline-block;">×</a></div></div></td></tr><tr><td class="ui_icon" style="display: none;"></td><td class="ui_main" style="width: auto; height: auto;"><div class="ui_content" style="padding: 10px;"><div class="ui_loading"><span>loading...</span></div></div></td></tr><tr><td colspan="2"><div class="ui_buttons" style="display: none;"></div></td></tr></tbody></table></div></td><td class="ui_r"></td></tr><tr><td class="ui_lb"></td><td class="ui_b"></td><td class="ui_rb" style="cursor: se-resize;"></td></tr></tbody></table></div>
+<div class="wrapper">
+    <header class="main-header">
+<div class="logotop">
+    <div class="logotop-bar">
+        <div class="logotop-lf">
+            Hi,欢迎来到西北医药网
+            <span>
+                【
+                <a href="/tovivw?name=login" style="color: #e57816;">请先登录</a>
+                |
+                <a href="/tovivw?name=register">注册</a>
+                                】
+            </span>
+        </div>
+        <ul class="logotop-rt">
+            <li>服务热线：400-0097-600</li>
+            <li><a href="#">我的订单 </a></li>
+            <li><a href="#">我的购物车</a></li> 
+            <li><a href="#">帮助中心</a></li>
+            <li><a href="#">收藏网站</a></li>
+        </ul>
+    </div>
+</div>
+<!--logo栏目-->
+<div class="logobox" style="overflow:initial;height:120px;">
+    <div class="logoimg">
+        <a href="#">
+            <img src="/账号注册_files/index_03.png" width="303" height="125">
+        </a>
+    </div>
+    <div class="logobox-rt" style="overflow:initial">
+        <form action="#" method="get">
+            <div class="search-box" style="overflow:initial">
+                <input type="text" class="ss-input" name="key" value="" placeholder="请输入关键字进行搜索">
+                <button type="submit">搜索</button>
+				<div class="input-xlbox" id="zhaode">
+					
+						
+					
+				</div>
+            </div>
+        </form>
+		<script>
+			
+			//$("body").on("input propertychange",".ss-input",function(){
+			//	 var name=$(".ss-input").val();
+				  // alert(name);
+		//		   $.ajax({
+		//				type:'post',
+		//				url:"index.php/Home/Index/see.html",
+		//				data:{'name':name},
+		//				success:function(data){
+		//					if(data.state=='1'){
+		//						var html="";
+								//console.log(data.temp)
+		//						for(var i=0;i<data.temp.length;i++){
+		//							html +="<div class='xl-list' inclick>"+data.temp[i].goods_name +"</div>";
+		//						}
+		//						
+		//					   $("#zhaode").html(html);
+		//						
+		//					}
+		//				}
+		//			});
+				
+	//		}) 
+			var text22 = '';
+			$("#zhaode").on('mouseover',"div", function(){
+				 text22 = $(this).html()
+			    //$('.ss-input').val()
+			})
+			$('.ss-input').focus(function(){
+				$('.input-xlbox').show();
+				$('.input-xlbox').css('zIndex','999');
+				$('.input-xlbox').css('opacity','1');
+			});
+			$('.ss-input').blur(function(){
+				$('.input-xlbox').css('zIndex','-1');
+				$('.input-xlbox').css('opacity','0');
+				$(this).val(text22)
+			});
+			
+		</script>
+		<style>
+		.input-xlbox{position: absolute;width:350px;top:41px;left:-1px;background:#fff;border:1px solid #ff912f;display:none;}
+		.xl-list{width:100%;padding:5px;box-sizing:border-box;}
+		.xl-list:hover{background:#f2f2f2}
+		</style>
+        <div style="float:right;">
+					
+			  <a href="#" class="drug-register">
+                <img src="/账号注册_files/index_06.png"> 缺药登记
+            </a>
+			
+		             <a href="#" class="myshopping">
+                <img src="/账号注册_files/index_08.png">
+                我的购物车
+            </a> 
+        </div> 
+    </div>
+</div>
+<!--导航-->
+<div class="navbar">
+    <div class="navbox">
+        <h3>药品分类</h3>
+        <ul class="navbar-list">
+            <li><a href="/tovivw?name=slideshow">首页</a></li>
+            <li><a href="/tovivw?name=attract">招商/代理</a></li>
+            <li><a href="/tovivw?name=enterprise">上榜企业</a></li>
+            <li><a href="/tovivw?name=data">数据中心</a></li>
+            <li><a href="#">资讯平台</a></li>
+            <li><a href="/tovivw?name=medical">医药会展</a></li>
+            <li><a href="/tovivw?name=activityArea">活动专区</a></li>
+        </ul>
+    </div>
+</div>
+</header>
+<div class="xb-rightbox">
+	<a href="#">
+		<div class="xb-right_list">
+			<img alt="" src="/账号注册_files/gr.png">
+			我的
+		</div>
+	</a>
+	 <a href="#">
+		<div class="xb-right_list">
+			<img alt="" src="/账号注册_files/dd.png">
+			订单
+		</div>
+	</a>
+	<a href="#">
+		<div class="xb-right_list">
+			<img alt="" src="/账号注册_files/gwc.png">
+			购物车
+	
+		</div>
+	</a>
+	<a href="#">
+		<div class="xb-right_list">
+			<img alt="" src="/账号注册_files/tw.png">
+			帮助
+		</div>
+	</a>
+	<a href="#">
+		<div class="xb-right_list">
+			<img alt="" src="/账号注册_files/sc.png">
+			收藏
+		</div>
+	</a>
+</div>
+<style>
+.xb-rightbox{width:50px;height:655px;position: fixed;right:0;top:15%;background: #377bee;border-radius: 5px;padding:0 2.5px;box-sizing:border-box;color:#fff;text-align:center;}
+.xb-right_list{color:#fff;margin-top:50px;}
+.xb-right_list img{width:36px;}
+.xb-qq{margin:5px auto;width:20px;height:20px;border-radius:50%;background:#ff5a00;line-height:20px;font-size:12px;}
+</style>
+    <div class="content-wrapper">
+    <section class="content-header">
+        
+
+    </section>
+    <section class="content">
+           
+
+<!--注册-->
+
+<!-- 注册前台验证  begin-->
+
+<!-- 注册前台验证 end-->
+
+<script type="text/javascript">
+
+
+
+
+/* 
+提交注册表单
+*/
+function check_submit(){
+    
+    var password = $("#member_passwd").val();
+    var password2 = $("#userNewPwd").val();
+  
+    if(password == password2){
+         $.ajax({
+          url:"http://192.168.101.104:7005/login/registerUser",
+          type:"post",
+          data:$("#reg_form2").serialize(),
+          success:function(data){
+           location.href="/tovivw?name=login"
+          },
+          error:function () {
+           alert("失败了")
+          }
+          })
+    }
+   
+ }
+
+
+</script>
+
+<form method="post" id="reg_form2">
+<div class="register-bigbox">
+    <div class="register-box">
+        <h1>Hi，欢迎注册！</h1>
+        <h3>注册</h3>
+		<dl class="register-list-item">
+            <dt>
+                 <span>账号：</span>
+            </dt>
+            <dd>
+                <input type="text" placeholder="请输入账号" name="account" id="member_account">
+                <p style="color:#000000"></p>
+            </dd>
+         </dl>
+        <dl class="register-list-item">
+            <dt>
+                 <span>用户名：</span>
+            </dt>
+            <dd>
+                <input type="text" placeholder="请输入姓名" name="userName" id="member_name">
+                <p style="color:#000000"></p>
+            </dd>
+         </dl>
+        <dl class="register-list-item">
+            <dt>
+                <span>登录密码：</span>
+            </dt>
+            <dd>
+                <input type="password" placeholder="请输入密码" name="userPwd" id="member_passwd">
+                <p style="color:#000000"></p>
+            </dd>
+        </dl>
+		
+        <dl class="register-list-item">
+            <dt>
+                <span>确认密码：</span>
+            </dt>
+            <dd>
+                <input type="password" placeholder="请重新输入密码" name="userNewPwd" id="userNewPwd">
+            </dd>
+        </dl>
+        <dl class="register-list-item">
+            <dt>
+                <span>手机号码：</span>
+            </dt>
+            <dd>
+                <input type="text" placeholder="请输入号码" name="userPhone" id="userPhone">
+            </dd>
+        </dl>
+        <dl class="register-list-item">
+            <dt></dt>
+            <dd style="float: right;">
+                <input type="checkbox" placeholder="" style="width: 20px;height: 20px;margin-top: 0;float: left;margin-right: 10px" name="is_agree_xieyi" value="1" id="is_agree_xieyi">
+                <span style="float: left;">我已阅读并同意 <a href="#" style="color: #2d69cf"> 《服务协议》</a></span>
+            </dd>
+        </dl>
+        <div class="register-box-btn">
+            <button type="button" class="regitr-btn" onclick="check_submit()">立即注册</button>
+            <p>
+                我已经注册，现在去 <a href="login.html" style="color: #2d69cf"> 登录</a>
+            </p>
+        </div>
+    </div>
+</div>
+</form>
+
+
+        
+
+
+    </section>
+</div>
+
+</div>
+    <!--底部内容-->
+<div class="footer-box">
+    <div class="footer-link" style="height:215px;">
+         <ul class="footer-linka">
+            <li style="font-size:18px;border-bottom:1.5px solid #fff">采购指南  </li>
+			
+            <li><a href="#">商户入驻</a></li>
+            <li><a href="#">代理流程</a></li>
+            <li><a href="#">购买流程</a></li>
+        </ul>
+        <ul class="footer-linka">
+            <li style="font-size:18px; border-bottom:1.5px solid #fff">支付方式 </li>
+            <li><a href="#">在线支付</a></li>
+        </ul>
+        <ul class="footer-linka">
+            <li style="font-size:18px;border-bottom:1.5px solid #fff">配送服务 </li>
+            <li><a href="#">上门自提</a></li>
+            <li><a href="#">限时配送</a></li>
+            <li><a href="#">配送服务查询</a></li>
+        </ul>
+        <ul class="footer-linka">
+            <li style="font-size:18px;border-bottom:1.5px solid #fff">售后服务 </li>
+            <li><a href="#">退货规则</a></li>
+            <li><a href="#">退货流程</a></li>
+        </ul> 
+        <ul class="footer-linka">
+            <li style="font-size:18px;border-bottom:1.5px solid #fff">商家合作</li>
+            <li><a href="#">企业采购</a></li>
+            <li><a href="#">销售</a></li>
+            <li><a href="#">代理人</a></li>
+        </ul>
+        <ul class="footer-linka">
+            <li style="font-size:18px;border-bottom:1.5px solid #fff">关于我们</li>
+            <li><a href="#">联系我们</a></li>
+            <li><a href="#">企业简介</a></li>
+        </ul>
+		<ul class="footer-linka">
+            <li style="font-size:18px;border-bottom:1.5px solid #fff">帮助中心</li>
+            <li><a href="#">密码找回</a></li>
+            <li><a href="#">密码修改</a></li>
+			<li><a href="#">意见与反馈</a></li>
+        </ul>
+        <div class="erweima-box">
+            <img src="账号注册_files/erweima_03.png">
+            <p>扫描关注，微信二维码</p>
+        </div>
+    </div>
+    <div style="padding:15px;font-size:15px;text-align: center;color:#fff">备案号；陕ICP备18007246号-1</div>
+</div>
+<div class="footer-bottom">
+    <p>Copyright ©   西北医药网版权所有</p>
+</div>
+<script>
+   // $(function(){
+   //     $.ajax({
+    //        'url':"index.php/Home/AjaxMessage/index.html",
+    //        type:'get',
+    //        dataType:'json',
+    //        success:function(data){
+    //            if(data.status==1) {
+    //                if(data.type===1){
+     //               	layer.msg(data.message,{icon:1});
+     //               }else{
+     //               	layer.alert(data.message,{icon:2});
+     //               }
+     ///           }
+     ///       }
+     // / })
+   // })
+
+</script>
+
+</body></html>

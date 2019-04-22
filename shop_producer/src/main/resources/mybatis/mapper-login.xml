@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lsl.mapper.LoginMapper">
+    <!--UserBean getQuery(UserBean user);-->
+    <select id="getQuery" resultType="com.lsl.bean.UserBean">
+      select * from t_userbean where account=#{account} and userPswd=#{userPwd}
+</select>
+    <!--void addUser(UserBean userBean);-->
+    <insert id="addUser">
+      insert into t_userbean(account,userName,userPswd,userPhone,state)VALUES
+      (#{account},#{userName},#{userPswd},#{userPhone},1)
+    </insert>
+</mapper>
