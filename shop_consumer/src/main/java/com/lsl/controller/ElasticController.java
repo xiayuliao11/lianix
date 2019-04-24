@@ -30,9 +30,11 @@ public class ElasticController {
 
     @ResponseBody
     @RequestMapping("queryGood")
-    public List<Good> queryGood(String queryInfo){
+    public JSONObject queryGood(Integer page,Integer rows,String queryInfo){
+        JSONObject result = new JSONObject();
         //拿到elastic客户端
         Client client = elasticsearchTemplate.getClient();
+        Integer startIndex = rows*(page-1);
         //参数为索引名称
         SearchRequestBuilder searchRequestBuilder = client.prepareSearch("good")
                 .setTypes("elgood")
@@ -40,6 +42,9 @@ public class ElasticController {
                 .setQuery(QueryBuilders.boolQuery().should(QueryBuilders.matchQuery("goodname",queryInfo))
                         .should(QueryBuilders.matchQuery("goodvender",queryInfo)));
         //.setQuery(QueryBuilders.matchQuery("goodInfo", queryInfo));
+        searchRequestBuilder.setFrom(startIndex).setSize(rows);
+        // 设置是否按查询匹配度排序
+        searchRequestBuilder.setExplain(true);
         HighlightBuilder highlightBuilder = new HighlightBuilder();
         highlightBuilder.field("goodname");
         highlightBuilder.field("goodvender");
@@ -53,6 +58,7 @@ public class ElasticController {
         System.out.println(searchResponse);
         //拿到命中条数
         SearchHits hits = searchResponse.getHits();
+        long total = hits.getTotalHits();
         //获取总条数 用来分页
         //hits.getTotalHits();
         //获取到结果集迭代器
@@ -89,8 +95,10 @@ public class ElasticController {
             // System.out.println(goodEs.getGoodInfo());
             goodEsList.add(goodEs);
         }
+        result.put("total",total);
+        result.put("rows",goodEsList);
         System.out.println(goodEsList);
-        return  goodEsList;
+        return  result;
 
     }
 }

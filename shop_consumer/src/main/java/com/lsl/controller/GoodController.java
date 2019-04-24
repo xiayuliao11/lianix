@@ -85,6 +85,7 @@ public class GoodController {
         Shop badGood=null;
         //生成的uuId 存入cooik
         setCookie(response,1800, Content.uuid);
+        System.out.println(Content.uuid);
         if(good.getUserId()==0){
             if(redisTemplate.hasKey(Content.uuid)){
                 //直接取出key对应的value
@@ -98,11 +99,11 @@ public class GoodController {
                     //如果redis中id有与传过来的对象id 名称一致的
                     if(badGood.getId().equals(good.getId())){
                         //   //修改redis仓库的数量 加上前台传过来的数量
-                        badGood.setGoodCount(badGood.getGoodCount()+good.getGoodCount());
+                        good.setGoodCount(badGood.getGoodCount()+good.getGoodCount());
                         //将之前的对象移除
-                        iterator.remove();
+                        list.remove(badGood);
                         //将新对象添加到list集合
-                        list.add(badGood);
+                        list.add(good);
                     }else{
 
                         //如果redis中对象id有与传过来的对象id名称不一致
@@ -121,24 +122,29 @@ public class GoodController {
                 //直接取出key对应的value
                 list = redisTemplate.opsForValue().get(Content.uuid+good.getUserId());
                 //使用iterator()迭代遍历
-                Iterator<Shop> iterator = list.iterator();
-                //判断是否有下个元素
-                if(iterator.hasNext()){
-                    //当前循环到的对象
-                    badGood=iterator.next();
-                    //如果redis中id有与传过来的对象id 名称一致的
-                    if(badGood.getId().equals(good.getId())){
-                        //   //修改redis仓库的数量 加上前台传过来的数量
-                        badGood.setGoodCount(badGood.getGoodCount()+good.getGoodCount());
-                        //将之前的对象移除
-                        iterator.remove();
-                        //将新对象添加到list集合
-                        list.add(badGood);
-                    }else{
+                if(list.size() !=0){
+                    Iterator<Shop> iterator = list.iterator();
+                    //判断是否有下个元素
+                    if(iterator.hasNext()){
+                        //当前循环到的对象
+                        badGood=iterator.next();
+                        //如果redis中id有与传过来的对象id 名称一致的
+                        if(badGood.getId().equals(good.getId())){
+                            //   //修改redis仓库的数量 加上前台传过来的数量
+                            badGood.setGoodCount(badGood.getGoodCount()+good.getGoodCount());
+                            //将之前的对象移除
+                            list.remove(badGood);
+                            //将新对象添加到list集合
+                            list.add(good);
+                        }else{
 
-                        //如果redis中对象id有与传过来的对象id名称不一致
-                        list.add(good);
-                    }
+                            //如果redis中对象id有与传过来的对象id名称不一致
+                            list.add(good);
+                        }
+                }
+
+                }else{
+                    list.add(good);
                 }
                 //将该集合存放到redis中
                 redisTemplate.opsForValue().set(Content.uuid+good.getUserId(),list,30, TimeUnit.MINUTES);
@@ -204,4 +210,139 @@ public class GoodController {
         System.out.println(goodlist);
         return goodlist;
     }
+    @ResponseBody
+    @RequestMapping("deletesShopCar")
+   public String deletesShopCar(Integer id,Integer userId,HttpServletRequest request){
+        List<Shop> list = new ArrayList<>();
+        //获取所有的KEY
+        Cookie[] cookies = request.getCookies();
+            for (Cookie cookie : cookies) {
+                if (userId== 0) {
+                    //如果cookie中存在key 查看Redis是否也存在key
+                    if (redisTemplate.hasKey(cookie.getName())) {
+                        list = redisTemplate.opsForValue().get(cookie.getName());
+                        redisTemplate.delete(cookie.getName());
+                    }
+                }else{
+                    if (redisTemplate.hasKey(cookie.getName()+userId)) {
+                        list = redisTemplate.opsForValue().get(cookie.getName()+userId);
+                        redisTemplate.delete(cookie.getName()+userId);
+                    }
+                }
+            }
+            if(list.size() != 0){
+                for (int i = 0; i < list.size(); i++) {
+                    if(list.get(i).getId().equals(id)){
+                        list.remove(list.get(i));
+                    }
+                }
+            }
+            if(list.size()!=0){
+                if(userId!=0){
+                    redisTemplate.opsForValue().set(Content.uuid+userId, list, 30, TimeUnit.MINUTES);
+                }else{
+                    redisTemplate.opsForValue().set(Content.uuid, list, 30, TimeUnit.MINUTES);
+                }
+            }
+    return "1";
+    }
+    @ResponseBody
+    @RequestMapping("queryCount")
+    public int queryCount(Integer id){
+
+        return goodService.queryCount(id);
+    }
+    @ResponseBody
+    @RequestMapping("jianCount")
+    public String jianCount(Shop shop,HttpServletRequest request){
+        List<Shop> list = new ArrayList<>();
+        //获取所有的KEY
+        Cookie[] cookies = request.getCookies();
+        if(cookies!=null){
+            for (Cookie cookie : cookies) {
+                if(shop.getUserId()==0){
+                    //如果cookie中存在key 查看Redis是否也存在key
+                    if(redisTemplate.hasKey(cookie.getName())){
+                        list = redisTemplate.opsForValue().get(cookie.getName());
+                        for (int i = 0; i < list.size(); i++) {
+                            if(list.get(i).getId().equals(shop.getId())){
+                                list.remove(list.get(i));
+                                list.add(shop);
+                                redisTemplate.delete(cookie.getName());
+                            }
+                        }
+                    }
+                }else{
+                    //如果cookie中存在key 查看Redis是否也存在key
+                    if(redisTemplate.hasKey(cookie.getName()+shop.getUserId())) {
+                        list = redisTemplate.opsForValue().get(cookie.getName()+shop.getUserId());
+                        for (int i = 0; i < list.size(); i++) {
+                            if(list.get(i).getId().equals(shop.getId())){
+                                list.remove(list.get(i));
+                                list.add(shop);
+                                redisTemplate.delete(cookie.getName()+shop.getUserId());
+                            }
+                        }
+
+                    }
+                }
+            }
+
+            if(shop.getUserId()==0){
+                redisTemplate.opsForValue().set(Content.uuid, list, 30, TimeUnit.MINUTES);
+            }else{
+                redisTemplate.opsForValue().set(Content.uuid+shop.getUserId(), list, 30, TimeUnit.MINUTES);
+            }
+        }
+        return "1";
+    }
+    //计算选中总钱数
+    @ResponseBody
+    @RequestMapping("jieSuanCheckPrice")
+    public double jieSuanCheckPrice(String ids,Integer userId,HttpServletRequest request){
+        String[] str = ids.split(",");
+
+        double count=0;
+        List<Shop> list = new ArrayList<>();
+        List<Good> goodlist=new ArrayList<>();
+        List<ShopGood> mongo = goodService.getGoodFromMongo(userId);
+        //获取所有的KEY
+        Cookie[] cookies = request.getCookies();
+        for (Cookie cookie : cookies) {
+            if (userId != 0) {
+                if (redisTemplate.hasKey(cookie.getName() + userId)) {
+                    list = redisTemplate.opsForValue().get(cookie.getName() + userId);
+                }
+            }
+        }
+        if(list!=null&&mongo!=null){
+            for (Shop shop : list) {
+                for (ShopGood shopGood : mongo) {
+                    Good good1 = new Good();
+                    if(shop.getId().equals(shopGood.getId())){
+                        good1.setId(shopGood.getId());
+                        good1.setGoodName(shopGood.getGoodName());
+                        good1.setGoodCount(shop.getGoodCount());
+                        good1.setGoodImg(shopGood.getGoodImg());
+                        good1.setGoodTime(shopGood.getGoodTime());
+                        good1.setGoodVender(shopGood.getGoodVender());
+                        good1.setGoodNorms(shopGood.getGoodNorms());
+                        good1.setUserId(shop.getUserId());
+                        good1.setGoodPrice(shopGood.getGoodPrice());
+                        good1.setHj(shop.getGoodCount()*shopGood.getGoodPrice());
+                        goodlist.add(good1);
+                    }
+                }
+            }
+        }
+        for (Good good : goodlist) {
+            for (int i = 0; i < str.length; i++) {
+                if(good.getUserId().equals(str[i])){
+                    count+=good.getHj();
+                }
+            }
+        }
+        return count;
+    }
+
 }

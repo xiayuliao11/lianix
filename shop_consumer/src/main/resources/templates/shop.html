@@ -4,12 +4,15 @@
     <meta charset="UTF-8">
     <title>首页</title>
     <script src="/js/jquery-2.1.1.min.js"></script>
+    <script  type="text/javascript" src="/js/jquery-cookie/jquery.cookie.js"></script>
     <link rel="stylesheet" type="text/css" href="/zht/css/css.css">
 
     <link href="/zht5121/css/jquery.slideBox.css" rel="stylesheet" type="text/css"/>
     <script src="/zht5121/js/jquery.slideBox.js" type="text/javascript"></script>
     <link rel="stylesheet" href="/js/bootstrap-3.3.7-dist/css/bootstrap.css">
     <script src="/js/bootstrap-3.3.7-dist/js/bootstrap.js"></script>
+    <script src="/js/layer/layer.js"></script>
+
 </head>
 <style type="text/css">
     td{vertical-align: middle !important;}
@@ -18,42 +21,43 @@
 <script type="text/javascript">
     $(function () {
        getShop();
-        getAllPrice();
+        getLoginUser();
+       getAllPrice();
     })
-    var StopId = null;
-    function getShop() {
+    var cookID='userID';
+    var userid=$.cookie(cookID);
+    function getShop(){
         $.ajax({
             url:"/to/getShop",
             type:"post",
+            data:{ userId:(userid==null? 0 :userid)},
             success:function(data){
-                console.log("-----------"+data)
                 var count='';
                 var countMoney=0;
                 var shulaing=0;
-               if(data==null){
-                   layer.msg("空空如也,快去购物")
-               }
-               $.each(data,function (index,obj) {
+                if(data==null){
+                    layer.msg("空空如也,快去购物")
+                }
+                $.each(data,function (index,obj) {
+                    count +="<tr>";
+                    count += "<td class='col1'><input type='checkbox' value='"+obj.id+"' name='checkAll' onclick='jieSuanCheck()'><a href=''><img  src='/page"+obj.goodImg+"' width='70' alt='图片维护中' /></a></td>"
+                    count +="<td>"+obj.goodName+"</td>";
+                    count +="<td>"+obj.goodPrice+"</td>";
+                    count +="<td>" +
+                        "                <button class='minus' onclick='jianCount("+obj.id+","+obj.goodCount+")'>-</button>" +
+                        "                <input id='text_box"+obj.id+"' min='' type='text' name='min' value='"+obj.goodCount+"' style='width:50px;text-align:center'>" +
+                        "                <button class='plus' onclick='addCount("+obj.id+","+obj.goodCount+")'>+</button>" +
+                        "    </td>";
+                    count +="<td>"+obj.hj+"</td>";
+                    count +="<td> <input type='button' class='btn btn-danger' onclick='deleteGoodss("+obj.id+")' value='删除'> </br>" +
+                        "                <a href='javascript:void(0)'>移动到我的关注</a>" +
+                        "            </td>"
+                    count +="</tr>";
 
-                   count +="<tr>";
-                   count += "<td class='col1'><input type='checkbox' value='"+obj.id+"' name='checkAll' onclick='jieSuanCheck()'><a href=''><img  src='/img"+obj.goodImg+"' width='70' alt='图片维护中' /></a></td>"
-                   count +="<td>"+obj.goodName+"</td>";
-                   count +="<td>"+obj.goodPrice+"</td>";
-                   count +="<td>" +
-                       "                <button class='minus' onclick='jianCount("+obj.id+","+obj.goodCount+","+obj.goodPrice+")'>-</button>" +
-                         "                <input id='text_box' min='' type='text' name='min' value='"+obj.goodCount+"' style='width:50px;text-align:center'>" +
-                         "                <button class='plus' onclick='addCount("+obj.id+","+obj.goodCount+","+obj.goodPrice+")'>+</button>" +
-                       "    </td>";
-                   count +="<td>"+obj.hj+"</td>";
-                   count +="<td> <input type='button' class='btn btn-danger' onclick='deleteGoodss("+obj.id+")' value='删除'> </br>" +
-                       "                <a href='javascript:void(0)'>移动到我的关注</a>" +
-                       "            </td>"
-                   count +="</tr>";
+                    countMoney+=parseInt(obj.hj);  //总价
+                    shulaing+=parseInt(obj.tjshl); //数量
 
-                   countMoney+=parseInt(obj.hj);  //总价
-                   shulaing+=parseInt(obj.tjshl); //数量
-
-               })
+                })
                 $(".num").html(shulaing);
                 $(".allPPrice").html(countMoney);
                 $("#tbody").html(count);
@@ -68,7 +72,9 @@
   function deleteGoodss(id){
         $.ajax({
             url:'/to/deletesShopCar',
-            data:{ids:id},
+            data:{id:id,
+                userId:(userid==null? 0 :userid)
+            },
             success:function () {
                 window.location.reload(true);
             },error:function(){
@@ -79,15 +85,17 @@
 
     }
     //减数量
-    function jianCount(id,tjshl,skuJg) {
-        if(tjshl>1){
+    function jianCount(id,goodCount) {
+        if(goodCount>1){
             $(".minus").click(function () {
-                tjshl--;
-                $("#text_box").val(tjshl);
+                goodCount--;
+                $("#text_box"+id+"").val(goodCount);
                 $.ajax({
                     url: "/to/jianCount",
                     type: "POST",
-                    data: {tjshl: tjshl, id: id, skuJg: skuJg},
+                    data: {goodCount: goodCount,
+                        id: id,
+                        userId:(userid==null? 0 :userid)},
                     success: function (result) {
                         window.location.reload(true);
                     },
@@ -101,26 +109,38 @@
         }
     }
 
-    function addCount(id,skuJg,tjshl){
+    function addCount(id,goodCount){
 
         $(".plus").click(function(){
-            tjshl++;
-            $("#text_box").val(tjshl);
+            goodCount++;
+            $("#text_box"+id+"").val(goodCount);
             $.ajax({
-                url:"/to/addCount",
-                type:"POST",
-                data:{tjshl:tjshl,id:id,skuJg:skuJg},
-                success:function(result){
-                    window.location.reload(true);
-                },
-                error:function(){
-                    alert("失败了");
+                url: "/to/queryCount",
+                type: "POST",
+                data: {id: id},
+                success: function (result) {
+                    if (goodCount < result) {
+                        $.ajax({
+                            url: "/to/jianCount",
+                            type: "POST",
+                            data: {
+                                goodCount: goodCount, id: id,
+                                userId: (userid == null ? 0 : userid)
+                            },
+                            success: function (result) {
+                                window.location.reload(true);
+                            },
+                            error: function () {
+                                alert("失败了");
+                            }
+                        })
+                    } else {
+                        layer.msg("商家正在上货中,请稍后操作!!!")
+                    }
                 }
             })
-
         })
     }
-
     function getAllPrice() {
         var aa= $(".totalPrice").html();
         $(".allPPrice").html(aa)
@@ -131,9 +151,7 @@
     function jieSuanCheck(){
         var arr=document.getElementsByName("checkAll");
         var ids="";
-      //  alert(arr)
-        var count=0;
-
+         var count=0;
         for (var i = 0; i <arr.length ; i++) {
 
             if(arr[i].checked){
@@ -145,7 +163,9 @@
             $.ajax({
                 url:"/to/jieSuanCheckPrice",
                 type:"POST",
-                data:{ids:ids.substring(1)},
+                data:{ids:ids.substring(1),
+                    userId: (userid == null ? 0 : userid)
+                },
                 success:function(price){
                     priceID += price;
                     //$(".anPrice").html(price);
@@ -157,40 +177,88 @@
                 }
             })
         }else{
-            //$(".anPrice").html(0);
             $("#jgId").html(0);
         }
+        //结算
+      //  alert(arr)
+      //   for (var i = 0; i <arr.length ; i++) {
+      //       if(arr[i].checked){
+      //           var price=parseFloat(arr[i].value)
+      //           if(!isNaN(price)){
+      //               count+=price;
+      //           }
+      //       }
+      //   }
+      //   $("#jgId").html(count);
+        //alert(count)
     }
-    // function getPriceZHIFU(){
-    //     var array = $("input[name='checkAll']:checked");
-    //     if (array.length>0) {
-    //         var ids = "";
-    //         for(var i = 0;i< array.length;i++){
-    //             ids += array[i].value + ",";
-    //         }
-    //         ids = ids.substring(0,ids.length-1);
-    //         //alert(ids);
-    //         location.href="/alipay/zhifu?jg="+priceID;
-    //         //删除,非同步删除,支付成功失败都删除
-    //         $.ajax({
-    //             url:"/details/deletesShopCar",
-    //             type:"POST",
-    //             data:{ids:ids},
-    //             success:function(result){
-    //
-    //             },
-    //             error:function(){
-    //                 layer.msg("失败了");
-    //             }
-    //         })
-    //     }else{
-    //         layer.msg("未选择商品!");
-    //     }
-    //
-    // }
+    function getLoginUser(){
+        var cookie_name='userName';
+        var name=$.cookie(cookie_name);
+        var count="";
+        if(name!=''){
+            count+="【";
+            count+=JSON.parse($.cookie(cookie_name));
+            count+="|<a href='#' onclick='logout()' style='color:#e57816;'>退出登录</a>";
+            count+="】";
+
+        }else{
+            count+="【";
+            count+="<a href='/to/tovivw?name=login' style='color:#e57816;'>请先登录</a>";
+            count+="|<a href='/to/tovivw?name=register'>免费注册</a>";
+            count+="】";
+        }
+        $("#span").html(count)
+    }
+    function logout() {
+        var cookie_name='userName';
+        $.cookie(cookie_name, '');
+        var cookID='userID';
+        $.cookie(cookID, '');
+        $("#span").html();
+        getLoginUser();
+    }
+
+    function getPriceZHIFU(){
+        var array = $("input[name='checkAll']:checked");
+         if (array.length>0) {
+             var ids = "";
+             for(var i = 0;i< array.length;i++){
+                 ids += array[i].value + ",";
+             }
+             ids = ids.substring(0,ids.length-1);
+             //alert(ids);
+             location.href="/alipay/zhifu?jg="+priceID;
+             //删除,非同步删除,支付成功失败都删除
+            $.ajax({
+                 url:"/details/deletesShopCar",
+                 type:"POST",
+                 data:{ids:ids},
+                success:function(result){
+
+                },
+                 error:function(){
+                    layer.msg("失败了");
+                }
+            })
+         }else{
+             layer.msg("未选择商品!");
+         }
+
+     }
 </script>
 <body>
+
 <div class="top">
+    <div class="logotop-lf">
+        <span id="span">
+                       【
+                <a href="/to/tovivw?name=login" style="color: #e57816;">请先登录</a>
+                |
+                <a href="/to/tovivw?name=register">免费注册</a>
+                                】
+            </span>
+    </div>
     <div class="top_text">
         <a href="">用户登录</a>
         <a href="">用户注册</a>
@@ -202,7 +270,7 @@
   <!--  <img src="/images/top_img.jpg" alt="">-->
 </div>
 <div class="search">
-    <div class="logo"><img src="" alt=""></div>
+    <div class="logo"><img style="width: 130px" src="/images/jdlogo.gif" alt=""></div>
     <div class="search_on">
         <div class="se">
             <input type="text" name="search" class="lf">
@@ -240,11 +308,11 @@
     </table>
 </div>
 <div class="Cprice">
-    <div class="y3 fl">总价:</div>
+    <div class="y3 fl" style="float:left;margin-top: 15px;margin-left: 5%;"><h6>总价:</h6></div>
     <!--结算 价格  -->
-    <div class="allPPrice"></div>
-    <div class="y3 f2">结算价格:</div>
-    <div class="anPrice"><h5 id="jgId"></h5></div>
+    <div class="allPPrice" style="float:left;margin-top: 15px;margin-left: 5%;"></div>
+    <div class="y3 f2" style="float:left;margin-top: 15px;margin-left: 10%;"><h6>结算价格:</h6></div>
+    <div class="anPrice" style="float:left;margin-top: 15px;margin-left: 5%;"><h5 id="jgId"></h5></div>
     <div class="jiesuan" onclick="getPriceZHIFU()">结算</div>
 </div>
 
@@ -307,43 +375,6 @@
     </div>
 </div>
 <script type="application/javascript">  //card
-$(function () {
-    onshowthree();
-    onhidethree();
-
-})
-
-    function onshowthree(){
-        $(".card").mouseover(function(){
-            $(".cart_pro").show();
-            $.ajax({
-                url:"/shoppingcart",
-                type:"post",
-                success:function(result){
-                    // console.log("111111"+result)
-                    var count = "";
-                    $.each(result,function(index,data){
-                        count+="<div class=\"one\" >";
-                        count+="<img src="+data.shp_tp+" width='66px' height='66px'>";
-                        count+="<span>"+data.sku_mch+"</span><br/>";
-                        count+="<span><b>"+data.hj+"</b><a href='javascript:deleteaa("+data.Id+")'>删除</a></span><br/>";
-
-                        count+="</div>";
-                    })
-                    $(".cart_pro").html(count)
-                },
-                error:function(){
-                    layer.msg("失败了");
-                }
-            })
-        })
-
-    }
-    function onhidethree(){
-        $(".card").mouseout(function() {
-            $(".cart_pro").hide();
-        })
-    }
 
 
 

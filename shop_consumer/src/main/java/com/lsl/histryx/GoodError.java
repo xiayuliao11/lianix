@@ -44,4 +44,10 @@ public class GoodError implements GoodService {
     public void addUser(UserBean userBean) {
 
     }
+
+    @Override
+    public int queryCount(Integer id) {
+        return 0;
+    }
+
 }

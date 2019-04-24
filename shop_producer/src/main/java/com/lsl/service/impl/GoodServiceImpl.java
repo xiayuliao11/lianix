@@ -27,4 +27,9 @@ public class GoodServiceImpl implements GoodService {
     public Good getGoodFromId(Integer id) {
         return mapper.getGoodFromId(id);
     }
+
+    @Override
+    public int queryCount(Integer id) {
+        return mapper.queryCount(id);
+    }
 }

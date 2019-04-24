@@ -18,4 +18,11 @@ public interface GoodService {
      * @return
      */
     Good getGoodFromId(Integer id);
+
+    /**
+     * 根据id查询库存数量
+     * @param id
+     * @return
+     */
+    int queryCount(Integer id);
 }

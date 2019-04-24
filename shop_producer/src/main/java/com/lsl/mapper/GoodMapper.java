@@ -20,4 +20,12 @@ public interface GoodMapper {
      */
     @Select("select * from t_good where id=#{id}")
     Good getGoodFromId(Integer id);
+
+    /**
+     * 根据id查询商品数量
+     * @param id
+     * @return
+     */
+    @Select("select goodCount from t_good where id=#{id}")
+    int queryCount(Integer id);
 }

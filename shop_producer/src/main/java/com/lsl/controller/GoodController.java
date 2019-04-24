@@ -59,6 +59,10 @@ public class GoodController{
         }
         return Goodlist;
     }
-
+    @ResponseBody
+    @RequestMapping("queryCount")
+    public int queryCount(Integer id){
+       return service.queryCount(id);
+    }
 
 }

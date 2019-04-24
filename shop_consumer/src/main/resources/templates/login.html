@@ -240,7 +240,6 @@
             type:"GET",
             data:$("#form").serialize(),
             success:function(result){
-                console.log(result)
 			    var cookie_name='userName';
 			    var cookID='userID';
                 if(result!=''){
@@ -250,7 +249,7 @@
                      });
                     $.cookie(cookID, strId,{ expires: 7, path:'/'//设置时间，如果此处留空，则浏览器关闭此cookie就失效。
                     });
-                    location.href="/to/toshow";   //账号密码正确
+                    location.href="/to/tovivw?name=shopList";   //账号密码正确
 					//$.cookie("username", result.userName , { path: '/', expires: 10, domain: 'jquery.com', secure: true });
                 }else{
 

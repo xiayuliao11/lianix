@@ -18,7 +18,7 @@ public interface GoodService {
     Good getGoodFromId(@RequestParam Integer id);
 
     @GetMapping("/good/getGoodFromMongo")
-    List<ShopGood> getGoodFromMongo(Integer userId);
+    List<ShopGood> getGoodFromMongo(@RequestParam Integer userId);
     
     @GetMapping("/login/getQuery")
     UserBean getQuery(@RequestParam String account, @RequestParam String userPswd);
@@ -28,4 +28,8 @@ public interface GoodService {
 
     @PostMapping("/login/addUser")
     void addUser(@RequestBody UserBean userBean);
+
+    @GetMapping("/good/queryCount")
+    int queryCount(@RequestParam Integer id);
+
 }
